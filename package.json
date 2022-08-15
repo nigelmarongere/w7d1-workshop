@@ -1,0 +1,25 @@
+{
+  "name": "w7d1-workshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/multiverse-SWE-spliced-bread/w7d1-workshop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/multiverse-SWE-spliced-bread/w7d1-workshop/issues"
+  },
+  "homepage": "https://github.com/multiverse-SWE-spliced-bread/w7d1-workshop#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "sequelize": "^6.21.3",
+    "sqlite3": "^5.0.11"
+  }
+}
