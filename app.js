@@ -1,55 +1,52 @@
 const {buildDB} = require('./db/populateDataBase')
-const express = require('express')
-const {Cheese} = require('./models')
-const app = express()
-buildDB()
+const express = require('express');
+const {Cheese} = require('./models/index')
+const app = express();
+const port = 3000;
+buildDB();
 
+app.get('/', (req, res) => {
+    res.sendStatus(200)
+});
 
-app.get('/cheeses/:cheese', async (req, res) => {
-    
-    let newString = req.params.cheese[0].toUpperCase() + req.params.cheese.slice(1).toLowerCase()
-
-    const queriedCheese = await Cheese.findOne({where: {title: newString}})
-    if (!queriedCheese) {
-        res.send("Sorry, we don't have that cheese.")
-        return 
-    }
-    let {title, description } = queriedCheese
-    let payload = {
+app.get('/feta', async (req, res) => {
+    // Query database for data of Feta cheese 
+    const givenCheese = await Cheese.findOne({ 
+        where: { 
+            title: 'Feta' 
+        } 
+    });
+    let {title, description} = givenCheese; // { x, y } <- know as destructuring
+    let payLoad = {
         title: title,
         description: description
     }
-    res.send(payload)
-})
+    res.send(payLoad);
+});
 
-
-app.get('/cheeses', async (req, res) => {
-
-    const dbQuery = await Cheese.findAll()
-    let startsWithLetter = dbQuery.filter((cheese)=> { 
-        if (cheese.title[0] === req.query.startswith.toUpperCase()) {
-            return true}
-    }) 
-    if (startsWithLetter.length === 0) {
-        res.send("Sorry, no matches.")
-    } else {
-        let payload = startsWithLetter.map((cheeseObj) => {
-            return {
-                title: cheeseObj.title,
-                description: cheeseObj.description
-            }
-        })
-        res.send(payload)
+app.get('/starts-with-c', async (req, res) => {
+    const cheeseArray = await Cheese.findAll();
+    const startsWithC = new Array();
+    for(let i = 0; i < cheeseArray.length; i++){
+        let {title} = cheeseArray[i]
+        if(title[0] === 'C'){
+            startsWithC.push(title)
+        }
     }
-})
+    res.json(startsWithC);
+});
 
+app.get('/starts-with-f', async (req, res) => {
+    const cheeseArray = await Cheese.findAll();
+    const startsWithF = new Array();
+    const filterSelection = cheeseArray.filter((cheese) => {
+        if(cheese.title[0] === 'F'){
+            startsWithF.push(cheese.title)
+        };
+    });
+    res.json(startsWithF);
+});
 
-
-app.listen(3000, ()=>{
-    console.log('The server is live and listening at http://localhost:3000')
-})
-
-
-
-
-
+app.listen(port, () => {
+    console.log(`server is up and listening at http://localhost:${port}`)
+});
